@@ -1,0 +1,6 @@
+flutter run -d chrome = rodar o codigo direto no navegador 
+flutter clean
+flutter pub get
+flutter run -d chrome
+
+ederdr57@gmail.com

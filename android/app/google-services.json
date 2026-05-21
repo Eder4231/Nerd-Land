@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "195464626906",
+    "project_id": "nerdland-2b431",
+    "storage_bucket": "nerdland-2b431.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:195464626906:android:907ae0495f232cb6085be3",
+        "android_client_info": {
+          "package_name": "com.example.nerdland"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByQ5ukws6ixSpoZr5QO3v1LMQ5fc_L3HA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
