@@ -58,6 +58,8 @@ class AdminPage extends StatelessWidget {
         .doc(productId)
         .delete();
 
+        if (!context.mounted) return;
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Produto excluído com sucesso!')),
     );

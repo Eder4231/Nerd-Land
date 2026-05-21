@@ -59,10 +59,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
         .toList();
 
     if (name.isEmpty ||
-        priceText.isEmpty ||
-        imageUrl.isEmpty ||
-        description.isEmpty ||
-        categories.isEmpty) {
+    priceText.isEmpty ||
+    description.isEmpty ||
+    categories.isEmpty) {
       showMessage('Preencha todos os campos');
       return;
     }
@@ -80,7 +79,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
       final product = {
         'nome': name,
         'preco': price,
-        'imagem': imageUrl,
+        'imagem': imageUrl.isEmpty
+    ? 'https://placehold.co/400x400/png?text=NerdLand'
+    : imageUrl,
         'descricao': description,
         'categorias': categories,
         'ativo': true,
