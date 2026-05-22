@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import '../theme/nerdland_theme.dart';
 
 class NerdLandLogo extends StatelessWidget {
   final bool showText;
   final double size;
 
-  const NerdLandLogo({
+  NerdLandLogo({
     super.key,
     this.showText = true,
     this.size = 44,
@@ -13,6 +12,8 @@ class NerdLandLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -21,27 +22,27 @@ class NerdLandLogo extends StatelessWidget {
           height: size,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: NerdLandTheme.primary,
+            color: colors.primary,
             borderRadius: BorderRadius.circular(14),
           ),
           child: Text(
             'N',
             style: TextStyle(
               fontSize: size * 0.45,
-              color: Colors.white,
+              color: colors.onPrimary,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
         if (showText) ...[
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           RichText(
-            text: const TextSpan(
+            text: TextSpan(
               children: [
                 TextSpan(
                   text: 'NERD',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: colors.onSurface,
                     fontSize: 24,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1,
@@ -50,7 +51,7 @@ class NerdLandLogo extends StatelessWidget {
                 TextSpan(
                   text: 'LAND',
                   style: TextStyle(
-                    color: NerdLandTheme.primary,
+                    color: colors.primary,
                     fontSize: 24,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1,

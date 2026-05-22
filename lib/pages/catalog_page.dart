@@ -12,7 +12,7 @@ class CatalogPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: NerdLandTheme.background,
-      appBar: AppBar(title: const NerdLandLogo(size: 38)),
+      appBar: AppBar(title: NerdLandLogo(size: 38)),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('produtos')
@@ -20,10 +20,10 @@ class CatalogPage extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(
+            return Center(
               child: Text(
                 'Erro ao carregar produtos',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: NerdLandTheme.textPrimary),
               ),
             );
           }
@@ -35,10 +35,10 @@ class CatalogPage extends StatelessWidget {
           final produtos = snapshot.data!.docs;
 
           if (produtos.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'Nenhum produto cadastrado ainda',
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                style: TextStyle(color: NerdLandTheme.textPrimary, fontSize: 18),
               ),
             );
           }

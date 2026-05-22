@@ -39,7 +39,7 @@ class ProductCard extends StatelessWidget {
                 return Container(
                   height: 140,
                   color: NerdLandTheme.surfaceLight,
-                  child: const Center(
+                  child: Center(
                     child: Icon(
                       Icons.image_not_supported_outlined,
                       color: NerdLandTheme.textSecondary,
@@ -71,7 +71,7 @@ class ProductCard extends StatelessWidget {
 
                 Text(
                   'R\$ ${preco.toStringAsFixed(2)}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: NerdLandTheme.primary,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -84,7 +84,7 @@ class ProductCard extends StatelessWidget {
                   descricao,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: NerdLandTheme.textSecondary,
                     fontSize: 13,
                   ),
@@ -107,7 +107,7 @@ class ProductCard extends StatelessWidget {
                       ),
                       child: Text(
                         categoria.toString(),
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: NerdLandTheme.textSecondary,
                           fontSize: 11,
                         ),

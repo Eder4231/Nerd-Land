@@ -6,6 +6,7 @@ import '../theme/nerdland_theme.dart';
 import '../widgets/nerdland_button.dart';
 import '../widgets/nerdland_input.dart';
 import '../widgets/nerdland_logo.dart';
+import '../widgets/theme_toggle_button.dart';
 
 import 'start_page.dart';
 import 'login_page.dart';
@@ -119,18 +120,23 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const NerdLandLogo(showText: false, size: 70),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: const ThemeToggleButton(),
+                  ),
+                  const SizedBox(height: 8),
+                  NerdLandLogo(showText: false, size: 70),
                   const SizedBox(height: 24),
-                  const Text(
+                  Text(
                     'Criar conta',
                     style: TextStyle(
                       fontSize: 34,
                       fontWeight: FontWeight.w900,
-                      color: Colors.white,
+                      color: NerdLandTheme.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     'Entre para o universo NerdLand',
                     style: TextStyle(
                       fontSize: 17,
@@ -190,7 +196,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         'Já tem uma conta? ',
                         style: TextStyle(color: NerdLandTheme.textSecondary),
                       ),
@@ -199,11 +205,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const LoginPage(),
+                              builder: (_) => LoginPage(),
                             ),
                           );
                         },
-                        child: const Text(
+                        child: Text(
                           'Entrar',
                           style: TextStyle(
                             color: NerdLandTheme.primary,

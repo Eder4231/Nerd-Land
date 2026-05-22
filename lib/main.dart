@@ -21,18 +21,34 @@ void main() async {
   runApp(const NerdlandApp());
 }
 
-class NerdlandApp extends StatelessWidget {
+class NerdlandApp extends StatefulWidget {
   const NerdlandApp({super.key});
 
+  static State<NerdlandApp>? of(BuildContext context) {
+    return context.findAncestorStateOfType<_NerdlandAppState>();
+  }
+
+  @override
+  State<NerdlandApp> createState() => _NerdlandAppState();
+}
+
+class _NerdlandAppState extends State<NerdlandApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Nerdland',
-      debugShowCheckedModeBanner: false,
-      theme: NerdLandTheme.theme,
-      home: FirebaseAuth.instance.currentUser != null
-          ? const StartPage()
-          : const LoginPage(),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: NerdLandTheme.themeMode,
+      builder: (context, themeMode, child) {
+        return MaterialApp(
+          title: 'Nerdland',
+          debugShowCheckedModeBanner: false,
+          theme: NerdLandTheme.lightTheme,
+          darkTheme: NerdLandTheme.darkTheme,
+          themeMode: themeMode,
+          home: FirebaseAuth.instance.currentUser != null
+              ? const StartPage()
+              : LoginPage(),
+        );
+      },
     );
   }
 }

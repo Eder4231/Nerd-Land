@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import '../theme/nerdland_theme.dart';
 import '../widgets/nerdland_button.dart';
 import '../widgets/nerdland_logo.dart';
+import '../widgets/theme_toggle_button.dart';
 import 'catalog_page.dart';
 import 'admin_page.dart';
+import 'login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -30,14 +32,30 @@ class _StartPageState extends State<StartPage> {
     return doc.data()?['tipo'] == 'admin';
   }
 
+  Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => LoginPage()),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: NerdLandTheme.background,
       appBar: AppBar(
-        title: const NerdLandLogo(size: 38),
+        title:  NerdLandLogo(size: 38),
 
         actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Sair',
+            onPressed: signOut,
+          ),
           FutureBuilder<bool>(
             future: isAdmin(),
             builder: (context, snapshot) {
@@ -58,6 +76,7 @@ class _StartPageState extends State<StartPage> {
               );
             },
           ),
+          const ThemeToggleButton(),
         ],
       ),
       body: SingleChildScrollView(
@@ -75,16 +94,16 @@ class _StartPageState extends State<StartPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Seu universo anime favorito',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: NerdLandTheme.textPrimary,
                       fontSize: 34,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const Text(
+                  Text(
                     'Encontre figures, mangás, roupas e acessórios nerds em um só lugar.',
                     style: TextStyle(
                       color: NerdLandTheme.textSecondary,
@@ -185,8 +204,8 @@ class _InfoCard extends StatelessWidget {
           const Spacer(),
           Text(
             title,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: NerdLandTheme.textPrimary,
               fontWeight: FontWeight.w800,
               fontSize: 16,
             ),
@@ -194,7 +213,7 @@ class _InfoCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             text,
-            style: const TextStyle(
+            style: TextStyle(
               color: NerdLandTheme.textSecondary,
               fontSize: 13,
             ),

@@ -8,7 +8,7 @@ class NerdLandInput extends StatelessWidget {
   final bool obscureText;
   final TextInputType keyboardType;
 
-  const NerdLandInput({
+  NerdLandInput({
     super.key,
     required this.label,
     required this.hint,
@@ -20,18 +20,25 @@ class NerdLandInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: colors.onSurface,
+          ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         TextField(
           controller: controller,
           obscureText: obscureText,
           keyboardType: keyboardType,
+          style: TextStyle(color: colors.onSurface),
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: Icon(icon),

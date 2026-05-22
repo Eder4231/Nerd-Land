@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../theme/nerdland_theme.dart';
+import '../widgets/theme_toggle_button.dart';
 import 'login_page.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
@@ -33,7 +36,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const LoginPage()),
+        MaterialPageRoute(builder: (_) => LoginPage()),
       );
     } on FirebaseAuthException {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -51,7 +54,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       labelText: label,
       filled: true,
       fillColor: Colors.white.withValues(alpha: 0.2),
-      labelStyle: const TextStyle(color: Colors.white70),
+      labelStyle: TextStyle(color: NerdLandTheme.textSecondary),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
         borderSide: BorderSide.none,
@@ -62,65 +65,79 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('imagens/tela_de_login.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Container(
-          color: Colors.black.withValues(alpha: 0.5),
-          padding: const EdgeInsets.all(30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Recuperar Senha",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
+      backgroundColor: NerdLandTheme.background,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: NerdLandTheme.surface,
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(color: NerdLandTheme.border),
               ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: const ThemeToggleButton(),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Recuperar Senha",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: NerdLandTheme.textPrimary,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
 
-              const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-              const Text(
-                "Digite seu e-mail para receber o link de recuperação.",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white70),
+                  Text(
+                    "Digite seu e-mail para receber o link de recuperação.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: NerdLandTheme.textSecondary),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  TextField(
+                    controller: emailController,
+                    decoration: inputDecoration("E-mail"),
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  ElevatedButton(
+                    onPressed: loading ? null : resetPassword,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: NerdLandTheme.primary,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: loading
+                        ? const CircularProgressIndicator()
+                        : const Text("Enviar link"),
+                  ),
+
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => LoginPage()),
+                      );
+                    },
+                    child: Text(
+                      "Voltar para login",
+                      style: TextStyle(color: NerdLandTheme.primary),
+                    ),
+                  ),
+                ],
               ),
-
-              const SizedBox(height: 30),
-
-              TextField(
-                controller: emailController,
-                decoration: inputDecoration("E-mail"),
-              ),
-
-              const SizedBox(height: 25),
-
-              ElevatedButton(
-                onPressed: loading ? null : resetPassword,
-                child: loading
-                    ? const CircularProgressIndicator()
-                    : const Text("Enviar link"),
-              ),
-
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const LoginPage()),
-                  );
-                },
-                child: const Text(
-                  "Voltar para login",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

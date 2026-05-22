@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../theme/nerdland_theme.dart';
 import '../widgets/nerdland_button.dart';
 import '../widgets/nerdland_input.dart';
 import '../widgets/nerdland_logo.dart';
+import '../widgets/theme_toggle_button.dart';
 
 import 'start_page.dart';
 import 'register_page.dart';
 import 'forgot_password_page.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -44,16 +44,14 @@ class _LoginPageState extends State<LoginPage> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const StartPage()),
+        MaterialPageRoute(builder: (_) => StartPage()),
       );
     } on FirebaseAuthException catch (e) {
       showMessage(e.message ?? 'Erro ao fazer login');
     } catch (e) {
       showMessage('Erro inesperado: $e');
     } finally {
-      if (mounted) {
-        setState(() => loading = false);
-      }
+      if (mounted) setState(() => loading = false);
     }
   }
 
@@ -72,46 +70,53 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: NerdLandTheme.background,
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20),
             child: Container(
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: NerdLandTheme.surface,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(22),
-                border: Border.all(color: NerdLandTheme.border),
+                border: Border.all(color: colors.outline),
               ),
               child: Column(
                 children: [
-                  const NerdLandLogo(showText: false, size: 70),
-                  const SizedBox(height: 24),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: ThemeToggleButton(),
+                  ),
+                  SizedBox(height: 8),
+                  NerdLandLogo(showText: false, size: 70),
+                  SizedBox(height: 24),
 
-                  const Text(
+                  Text(
                     'Bem-vindo de volta',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w900,
-                      color: Colors.white,
+                      color: colors.onSurface,
                     ),
                   ),
 
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
 
-                  const Text(
+                  Text(
                     'Entre na sua conta NerdLand',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 17,
-                      color: NerdLandTheme.textSecondary,
+                      color: colors.onSurfaceVariant,
                     ),
                   ),
 
-                  const SizedBox(height: 32),
+                  SizedBox(height: 32),
 
                   NerdLandInput(
                     label: 'Email',
@@ -121,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.emailAddress,
                   ),
 
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18),
 
                   NerdLandInput(
                     label: 'Senha',
@@ -131,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true,
                   ),
 
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
 
                   Align(
                     alignment: Alignment.centerRight,
@@ -140,51 +145,51 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const ForgotPasswordPage(),
+                            builder: (_) => ForgotPasswordPage(),
                           ),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         'Esqueci minha senha',
                         style: TextStyle(
-                          color: NerdLandTheme.primary,
+                          color: colors.primary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ),
 
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
 
                   loading
-                      ? const CircularProgressIndicator()
+                      ? CircularProgressIndicator()
                       : NerdLandButton(
                           text: 'Entrar',
                           onPressed: login,
                         ),
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         'Não tem conta? ',
-                        style: TextStyle(color: NerdLandTheme.textSecondary),
+                        style: TextStyle(color: colors.onSurfaceVariant),
                       ),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const RegisterPage(),
+                              builder: (_) => RegisterPage(),
                             ),
                           );
                         },
-                        child: const Text(
+                        child: Text(
                           'Criar conta',
                           style: TextStyle(
-                            color: NerdLandTheme.primary,
+                            color: colors.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

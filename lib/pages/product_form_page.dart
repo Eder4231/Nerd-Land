@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 import '../theme/nerdland_theme.dart';
 import '../widgets/nerdland_button.dart';
@@ -24,6 +28,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
   final descriptionController = TextEditingController();
 
   bool loading = false;
+  bool uploadingImage = false;
 
   bool get isEditing => widget.productId != null;
 
@@ -118,6 +123,58 @@ class _ProductFormPageState extends State<ProductFormPage> {
     }
   }
 
+  Future<void> pickAndUploadImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1600,
+      imageQuality: 85,
+    );
+
+    if (pickedFile == null) return;
+
+    setState(() => uploadingImage = true);
+
+    try {
+      final uploadedUrl = await uploadImageToImgbb(pickedFile);
+      imageController.text = uploadedUrl;
+      showMessage('Imagem enviada com sucesso!');
+    } catch (e) {
+      showMessage('Falha ao enviar imagem: $e');
+    } finally {
+      if (mounted) {
+        setState(() => uploadingImage = false);
+      }
+    }
+  }
+
+  Future<String> uploadImageToImgbb(XFile imageFile) async {
+    final bytes = await imageFile.readAsBytes();
+    final base64Image = base64Encode(bytes);
+    final uri = Uri.parse(
+      'https://api.imgbb.com/1/upload?key=cf726b6ac7018be07bfaf51ce2d1ffd4',
+    );
+
+    final response = await http.post(
+      uri,
+      body: {
+        'image': base64Image,
+        'name': imageFile.name,
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Status ${response.statusCode}: ${response.body}');
+    }
+
+    final result = jsonDecode(response.body) as Map<String, dynamic>;
+    if (result['success'] != true) {
+      throw Exception(result['error'] ?? 'Upload inválido');
+    }
+
+    return result['data']['url'] as String;
+  }
+
   void showMessage(String message) {
     ScaffoldMessenger.of(
       context,
@@ -138,7 +195,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: NerdLandTheme.background,
-      appBar: AppBar(title: const NerdLandLogo(size: 38)),
+      appBar: AppBar(title: NerdLandLogo(size: 38)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Container(
@@ -152,8 +209,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
             children: [
               Text(
                 isEditing ? 'Editar Produto' : 'Novo Produto',
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: NerdLandTheme.textPrimary,
                   fontSize: 32,
                   fontWeight: FontWeight.w900,
                 ),
@@ -166,7 +223,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     ? 'Atualize as informações do produto'
                     : 'Cadastre um produto no catálogo NerdLand',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   color: NerdLandTheme.textSecondary,
                   fontSize: 16,
                 ),
@@ -195,10 +252,38 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
               NerdLandInput(
                 label: 'URL da imagem',
-                hint: 'Cole o link da imagem',
+                hint: 'Cole o link da imagem ou envie uma foto',
                 controller: imageController,
                 icon: Icons.image_outlined,
                 keyboardType: TextInputType.url,
+              ),
+
+              const SizedBox(height: 12),
+
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton.icon(
+                  onPressed: uploadingImage ? null : pickAndUploadImage,
+                  icon: uploadingImage
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.upload_file_outlined),
+                  label: Text(
+                    uploadingImage ? 'Enviando imagem...' : 'Enviar imagem para imgbb',
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: NerdLandTheme.primary,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                ),
               ),
 
               const SizedBox(height: 18),

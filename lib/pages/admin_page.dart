@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../theme/nerdland_theme.dart';
+import '../widgets/nerdland_button.dart';
 import '../widgets/nerdland_logo.dart';
 
 import 'product_form_page.dart';
@@ -70,7 +71,7 @@ class AdminPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: NerdLandTheme.background,
       appBar: AppBar(
-        title: const NerdLandLogo(size: 38),
+        title: NerdLandLogo(size: 38),
       ),
       body: FutureBuilder<bool>(
         future: isAdmin(),
@@ -84,14 +85,14 @@ class AdminPage extends StatelessWidget {
           final admin = snapshot.data ?? false;
 
           if (!admin) {
-            return const Center(
+            return Center(
               child: Padding(
-                padding: EdgeInsets.all(24),
+                padding: const EdgeInsets.all(24),
                 child: Text(
                   'Acesso negado.\nEsta área é exclusiva para administradores.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: NerdLandTheme.textPrimary,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
@@ -106,10 +107,10 @@ class AdminPage extends StatelessWidget {
                 .snapshots(),
             builder: (context, productSnapshot) {
               if (productSnapshot.hasError) {
-                return const Center(
+                return Center(
                   child: Text(
                     'Erro ao carregar produtos',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: NerdLandTheme.textPrimary),
                   ),
                 );
               }
@@ -125,10 +126,10 @@ class AdminPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Gerenciar Produtos',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: NerdLandTheme.textPrimary,
                         fontSize: 34,
                         fontWeight: FontWeight.w900,
                       ),
@@ -136,7 +137,7 @@ class AdminPage extends StatelessWidget {
 
                     const SizedBox(height: 8),
 
-                    const Text(
+                    Text(
                       'Área administrativa da NerdLand',
                       style: TextStyle(
                         color: NerdLandTheme.textSecondary,
@@ -148,8 +149,9 @@ class AdminPage extends StatelessWidget {
 
                     SizedBox(
                       width: double.infinity,
-                      height: 56,
-                      child: ElevatedButton.icon(
+                      child: NerdLandButton(
+                        text: 'Cadastrar Produto',
+                        icon: Icons.add,
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -158,15 +160,13 @@ class AdminPage extends StatelessWidget {
                             ),
                           );
                         },
-                        icon: const Icon(Icons.add),
-                        label: const Text('Cadastrar Produto'),
                       ),
                     ),
 
                     const SizedBox(height: 24),
 
                     if (produtos.isEmpty)
-                      const Center(
+                      Center(
                         child: Text(
                           'Nenhum produto cadastrado ainda',
                           style: TextStyle(
@@ -201,7 +201,7 @@ class AdminPage extends StatelessWidget {
                                     width: 70,
                                     height: 70,
                                     color: NerdLandTheme.surfaceLight,
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.image_not_supported_outlined,
                                       color: NerdLandTheme.textSecondary,
                                     ),
@@ -220,8 +220,8 @@ class AdminPage extends StatelessWidget {
                                     produto['nome'] ?? '',
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      color: Colors.white,
+                                    style: TextStyle(
+                                      color: NerdLandTheme.textPrimary,
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -229,7 +229,7 @@ class AdminPage extends StatelessWidget {
                                   const SizedBox(height: 4),
                                   Text(
                                     'R\$ ${(produto['preco'] ?? 0).toString()}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: NerdLandTheme.primary,
                                       fontWeight: FontWeight.bold,
                                     ),
